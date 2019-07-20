@@ -1,0 +1,26 @@
+---
+- name: "docker-compose | install prerequisite packages"
+  yum:
+    name: "{{ item  }}"
+    state: present
+  with_items:
+    - epel-release
+    - python-devel
+
+- name: "docker-compose | install pip"
+  yum:
+    name: python-pip
+    state: present
+
+- name: "docker-compose | install docker-compose"
+  pip:
+    name: docker-compose
+    state: present
+
+- name: "docker-compose | test docker-compose"
+  shell: "docker-compose --version"
+  register: return_from_shell
+
+- name: "docker-compose | show previous result"
+  debug:
+    msg: "{{ return_from_shell.stdout }}"
